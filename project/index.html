@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sairam Polisetty | Full-Stack Web Engineer</title>
+    <link class="img" rel="icon" type="image/jpg" href="sairam.jpg">
+    <meta name="description" content="Full-stack web engineer specializing in building high-impact web applications that users love." />
+    
+    <!-- Custom scripts for cursor effects -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const cursor = document.getElementById('cursor');
+        
+        if (cursor && window.matchMedia('(pointer: fine)').matches) {
+          document.addEventListener('mousemove', function(e) {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+          });
+          
+          // Scale effect on clickable elements
+          const clickables = document.querySelectorAll('a, button, input, [role="button"]');
+          clickables.forEach(element => {
+            element.addEventListener('mouseenter', () => {
+              cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+              cursor.style.opacity = '0.5';
+            });
+            
+            element.addEventListener('mouseleave', () => {
+              cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+              cursor.style.opacity = '1';
+            });
+          });
+        }
+        
+        // Image loading animation
+        const images = document.querySelectorAll('img');
+        images.forEach(img => {
+          img.classList.add('loading');
+          img.onload = function() {
+            img.classList.remove('loading');
+          };
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
