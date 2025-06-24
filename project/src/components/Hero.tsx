@@ -126,7 +126,7 @@ const Hero: React.FC = () => {
             <div className="relative w-full h-0 pb-[100%] rounded-2xl overflow-hidden shadow-xl border border-white/10 backdrop-blur-sm">
           
               <img
-                src="/sairam.jpg"
+                src="https://sairampolisetty.github.io/Myportfolio/assets/sairam-m3egx6tZ.jpg"
                 alt="SaiRam Polisetty"
                 className="absolute top-0 left-0 w-full h-full object-cover"
                 style={{
