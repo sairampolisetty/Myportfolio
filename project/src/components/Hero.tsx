@@ -126,7 +126,11 @@ const Hero: React.FC = () => {
             <div className="relative w-full h-0 pb-[100%] rounded-2xl overflow-hidden shadow-xl border border-white/10 backdrop-blur-sm">
           
               <img
+<<<<<<< HEAD
                 src="/Myportfolio/sairam.jpg"
+=======
+                src="sairam.jpg"
+>>>>>>> 57b2919 (Fix hero image path and layering for GitHub Pages)
                 alt="SaiRam Polisetty"
                 className="absolute top-0 left-0 w-full h-full object-cover"
                 style={{
