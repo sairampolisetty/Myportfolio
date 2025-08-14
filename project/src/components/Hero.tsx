@@ -125,20 +125,16 @@ const Hero: React.FC = () => {
           >
             <div className="relative w-full h-0 pb-[100%] rounded-2xl overflow-hidden shadow-xl border border-white/10 backdrop-blur-sm">
           
-              <img
-<<<<<<< HEAD
+            <img
                 src="/Myportfolio/sairam.jpg"
-=======
-                src="sairam.jpg"
->>>>>>> 57b2919 (Fix hero image path and layering for GitHub Pages)
                 alt="SaiRam Polisetty"
                 className="absolute top-0 left-0 w-full h-full object-cover"
                 style={{
-                  animation: 'float 6s ease-in-out infinite, rotate3d 12s linear infinite',
-                  borderRadius: '1.5rem',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'
+                animation: 'float 6s ease-in-out infinite, rotate3d 12s linear infinite',
+                borderRadius: '1.5rem',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'
                 }}
-              />
+            />
             </div>
           </motion.div>
         </div>

@@ -6,7 +6,7 @@ const Projects: React.FC = () => {
   const projects = [
     {
       title: 'YouTube Clone',
-      description: 'A full-featured YouTube clone with video streaming, search, and user authentication.',
+      description: 'A full-featured YouTube clone with video streaming, search, and user authentication. \n username: rahul   password: rahul@2021',
       image: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80',
       stats: '',
       technologies: ['HTML', 'React', 'SQL', 'Node.js'],
@@ -14,7 +14,7 @@ const Projects: React.FC = () => {
     },
     {
       title: 'Jobby Application',
-      description: 'A job portal application for searching and applying to jobs, with authentication and job details.',
+      description: 'A job portal application for searching and applying to jobs, with authentication and job details. \n username: rahul   password: rahul@2021',
       image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80',
       stats: '',
       technologies: ['HTML', 'CSS', 'React', 'Node', 'SQL'],
