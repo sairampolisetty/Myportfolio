@@ -32,7 +32,8 @@ const About = () => (
               <div className="relative w-full max-w-[500px] mx-auto">
                 {/* Floating "Hover me" hint outside the image container */}
                 <div className="absolute -top-[35px] -left-[10px] -rotate-10 font-mono text-green-500 text-base font-bold pointer-events-none flex items-center gap-2 z-20" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
-                    Hover me
+                    <span className="hidden md:inline">Hover me</span>
+                    <span className="inline md:hidden">Tap & drag</span>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="rotate-[135deg]">
                       <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>

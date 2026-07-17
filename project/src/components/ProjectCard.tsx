@@ -64,7 +64,7 @@ export const ProjectCard = ({ project, index }: { project: Project; index: numbe
       >
         <div 
           style={{ transform: "translateZ(30px)" }} 
-          className="h-[120px] md:h-[180px] overflow-hidden relative border-b border-[#1f1f1f]"
+          className="h-[160px] md:h-[200px] overflow-hidden relative border-b border-[#1f1f1f]"
         >
           <img src={project.image} alt={project.title} loading="lazy"
             className="proj-card-img w-full h-full object-cover grayscale-[40%] brightness-[0.6] group-hover:grayscale-0 group-hover:brightness-100 group-hover:scale-110 transition-all duration-500 ease-out"
@@ -79,7 +79,7 @@ export const ProjectCard = ({ project, index }: { project: Project; index: numbe
             <h3 className="text-[0.95rem] font-semibold text-gray-200">{project.title}</h3>
             <ExternalLink size={13} className="text-gray-400 shrink-0" />
           </div>
-          <p className="text-[0.75rem] md:text-[0.8rem] text-gray-400 leading-[1.65] mb-3 line-clamp-2 md:line-clamp-none">{project.desc}</p>
+          <p className="text-[0.75rem] md:text-[0.8rem] text-gray-400 leading-[1.65] mb-3 line-clamp-4 md:line-clamp-none">{project.desc}</p>
           {project.note && <p className="hidden md:block font-mono text-[0.6rem] text-gray-500 mb-3">{project.note}</p>}
           <div className="flex flex-wrap gap-1.5">
             {project.tech.map(t => <span key={t} className="tag">{t}</span>)}

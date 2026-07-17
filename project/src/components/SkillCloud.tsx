@@ -50,9 +50,9 @@ const SkillChip = ({ skill, index, resetSignal, containerRef }: any) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  // Reduce scatter on small screens to prevent overlap
+  // Reduce scatter on small screens to prevent overlap (set to 0 for perfect grid on mobile)
   const scatter = useMemo(() => {
-    const radius = typeof window !== 'undefined' && window.innerWidth < 640 ? 6 : 18;
+    const radius = typeof window !== 'undefined' && window.innerWidth < 640 ? 0 : 18;
     return {
       x: (Math.random() - 0.5) * radius,
       y: (Math.random() - 0.5) * radius,
@@ -74,7 +74,7 @@ const SkillChip = ({ skill, index, resetSignal, containerRef }: any) => {
       <motion.div
         key={index}
         drag
-        className="px-2.5 py-1.5 sm:px-5 sm:py-2.5 text-[0.55rem] sm:text-[0.8rem] flex items-center justify-center relative cursor-pointer font-mono text-[#e5e7eb] bg-green-500/5 border border-green-500/20 rounded-full"
+        className="px-4 py-2.5 sm:px-5 sm:py-2.5 text-[0.75rem] sm:text-[0.8rem] flex items-center justify-center relative cursor-pointer font-mono text-[#e5e7eb] bg-green-500/5 border border-green-500/20 rounded-full"
         style={{
           x, y,
           transformStyle: 'preserve-3d'
@@ -115,6 +115,13 @@ const SkillChip = ({ skill, index, resetSignal, containerRef }: any) => {
 export const SkillCloud = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [resetSignal, setResetSignal] = useState(0);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setResetSignal(s => s + 1);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>

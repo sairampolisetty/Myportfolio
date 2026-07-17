@@ -43,9 +43,9 @@ export const ImageAtomizer: React.FC<ImageAtomizerProps> = ({ imageUrl }) => {
     });
     observer.observe(canvas);
 
-    const dpr = window.devicePixelRatio || 1;
-    // CRITICAL: Force step = 1. This guarantees we sample EVERY single pixel from the 
-    // high-res image. Using step > 1 throws away pixels, causing terrible blurriness.
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    // Cap DPR to dramatically reduce particle count on mobile (fixes 5-second load time freeze)
+    const dpr = isMobile ? 0.8 : Math.min(window.devicePixelRatio || 1, 1.2);
     const step = 1; 
 
     const mouse = {
@@ -60,6 +60,15 @@ export const ImageAtomizer: React.FC<ImageAtomizerProps> = ({ imageUrl }) => {
       mouse.y = (event.clientY - rect.top) * (canvas.height / rect.height);
     };
 
+    const handleTouchMove = (event: TouchEvent) => {
+      // Prevent scrolling when swiping on the image
+      if (event.cancelable) event.preventDefault();
+      const rect = canvas.getBoundingClientRect();
+      const touch = event.touches[0];
+      mouse.x = (touch.clientX - rect.left) * (canvas.width / rect.width);
+      mouse.y = (touch.clientY - rect.top) * (canvas.height / rect.height);
+    };
+
     const handleMouseLeave = () => {
       mouse.x = -1000;
       mouse.y = -1000;
@@ -67,6 +76,10 @@ export const ImageAtomizer: React.FC<ImageAtomizerProps> = ({ imageUrl }) => {
 
     canvas.addEventListener('mousemove', handleMouseMove);
     canvas.addEventListener('mouseleave', handleMouseLeave);
+    canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+    canvas.addEventListener('touchstart', handleTouchMove, { passive: false });
+    canvas.addEventListener('touchend', handleMouseLeave);
+    canvas.addEventListener('touchcancel', handleMouseLeave);
 
     const image = new Image();
     image.crossOrigin = 'Anonymous';
@@ -201,6 +214,10 @@ export const ImageAtomizer: React.FC<ImageAtomizerProps> = ({ imageUrl }) => {
       observer.disconnect();
       canvas.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('mouseleave', handleMouseLeave);
+      canvas.removeEventListener('touchmove', handleTouchMove);
+      canvas.removeEventListener('touchstart', handleTouchMove);
+      canvas.removeEventListener('touchend', handleMouseLeave);
+      canvas.removeEventListener('touchcancel', handleMouseLeave);
     };
   }, [imageUrl]);
 
