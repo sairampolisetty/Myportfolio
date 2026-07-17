@@ -5,11 +5,11 @@ import { TextReveal } from './TextReveal';
 import { StickmanAvatar } from './StickmanAvatar';
 
 const levels = [
-  { id: 0, label: '', x: 15, y: 85 },
-  { id: 1, label: 'Full stack', x: 85, y: 68 },
-  { id: 2, label: 'AI Tools', x: 15, y: 51 },
-  { id: 3, label: 'Aws', x: 85, y: 34 },
-  { id: 4, label: 'Cyber Security', x: 50, y: 15 },
+  { id: 0, label: '', x: 15, y: 88 },
+  { id: 1, label: 'Full stack', x: 85, y: 72 },
+  { id: 2, label: 'AI Tools', x: 15, y: 55 },
+  { id: 3, label: 'Aws', x: 85, y: 38 },
+  { id: 4, label: 'Cyber Security', x: 50, y: 22 },
 ];
 
 export default function LevelUp() {
@@ -75,7 +75,7 @@ export default function LevelUp() {
           {/* Right Mini-Game Content */}
           <motion.div 
             initial={{ opacity:0, scale:0.95 }} whileInView={{ opacity:1, scale:1 }} transition={{ duration:.6, delay:.2 }} viewport={{ once:true, amount:.2 }}
-            className="relative w-full bg-[#0d0d0d] border border-[#1f1f1f] rounded-xl p-4 shadow-2xl h-[450px] sm:h-[500px] lg:h-[550px] flex flex-col"
+            className="relative w-full bg-[#0d0d0d] border border-[#1f1f1f] rounded-xl p-4 shadow-2xl h-[480px] sm:h-[520px] lg:h-[580px] flex flex-col"
           >
             {/* Game Header Controls */}
             <div className="flex flex-wrap justify-between items-center mb-6 relative z-20 gap-4">

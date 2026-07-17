@@ -48,7 +48,7 @@ const Projects = () => (
           className="w-full pt-4 pb-12"
         >
           {projects.map((p, i) => (
-            <SwiperSlide key={p.title} className="w-full max-w-[280px]">
+            <SwiperSlide key={p.title} className="w-full max-w-[290px]">
               <ProjectCard project={p} index={i} />
             </SwiperSlide>
           ))}
