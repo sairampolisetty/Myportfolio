@@ -1,143 +1,164 @@
-import React, { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Sphere, MeshDistortMaterial } from '@react-three/drei';
 import { Typewriter } from 'react-simple-typewriter';
-import Button from './Button';
+import { ArrowRight, Download } from 'lucide-react';
+import { TextReveal } from './TextReveal';
 
-const AnimatedSphere = () => {
-  return (
-    <Sphere args={[1, 100, 200]} scale={2}>
-      <MeshDistortMaterial
-        color="#4f46e5"
-        attach="material"
-        distort={0.5}
-        speed={1.5}
-        roughness={0}
-      />
-    </Sphere>
-  );
-};
-
-const Hero: React.FC = () => {
-  const profileRef = useRef<HTMLDivElement>(null);
+const Hero = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!profileRef.current) return;
-      
-      // Calculate the center of the element
-      const rect = profileRef.current.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      
-      // Calculate the distance from the mouse to the center
-      const distX = (e.clientX - centerX) / 25;
-      const distY = (e.clientY - centerY) / 25;
-      
-      // Apply the transform (limited range)
-      profileRef.current.style.transform = `perspective(1000px) rotateY(${distX}deg) rotateX(${-distY}deg)`;
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
+    const cv = canvasRef.current; 
+    if (!cv) return;
     
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
+    const ctx = cv.getContext('2d')!;
+    let w = 0, h = 0, raf = 0, t = 0;
+    
+    const resize = () => { 
+      w = cv.width = cv.offsetWidth; 
+      h = cv.height = cv.offsetHeight; 
+    };
+    resize();
+    window.addEventListener('resize', resize);
+    
+    // Background stars (spread out further to cover corners during rotation)
+    const stars = Array.from({ length: 800 }, () => ({
+      x: (Math.random() - 0.5) * 2.5,
+      y: (Math.random() - 0.5) * 2.5,
+      r: Math.random() * 1.5 + 0.5,
+      a: Math.random() * 0.7 + 0.1,
+      twinkleSpeed: Math.random() * 0.03 + 0.01,
+    }));
+
+    // One slow-moving dot
+    let slowDot = {
+      x: -0.1,
+      y: 0.5,
+      speed: 0.0025,
+      active: true,
+      delayCounter: 0,
+    };
+    
+    let isVisible = true;
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+      if (isVisible) draw();
+    });
+    observer.observe(cv);
+
+    const draw = () => {
+      if (!isVisible) return;
+      t++;
+      ctx.clearRect(0, 0, w, h);
+      
+      // Draw background stars with slow 360 rotation
+      ctx.save();
+      ctx.translate(w/2, h/2);
+      ctx.rotate(t * 0.0005); // Very slow rotation
+      
+      stars.forEach(s => {
+        s.a += Math.sin(t * s.twinkleSpeed) * 0.02; 
+        if(s.a < 0.1) s.a = 0.1;
+        if(s.a > 1) s.a = 1;
+        
+        ctx.beginPath(); 
+        const maxDim = Math.max(w, h);
+        ctx.arc(s.x * maxDim, s.y * maxDim, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${s.a})`; 
+        ctx.fill();
+      });
+      ctx.restore();
+
+      // Draw the single slow-moving dot
+      if (slowDot.active) {
+        slowDot.x += slowDot.speed;
+        
+        // Arc path: calculate progress from -0.1 to 1.1, mapping to a sine wave arch
+        const progress = (slowDot.x + 0.1) / 1.2;
+        slowDot.y = 0.5 - Math.sin(progress * Math.PI) * 0.25;
+        
+        const dotX = slowDot.x * w;
+        const dotY = slowDot.y * h;
+        
+        // The dot itself with a soft glow
+        ctx.beginPath();
+        ctx.arc(dotX, dotY, 3, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,1)';
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = 'white';
+        ctx.fill();
+        ctx.shadowBlur = 0; // reset
+
+        // Deactivate once it passes the screen
+        if (slowDot.x > 1.1) {
+          slowDot.active = false;
+          slowDot.delayCounter = 60 + Math.random() * 60;
+        }
+      } else {
+        slowDot.delayCounter--;
+        if (slowDot.delayCounter <= 0) {
+          slowDot.active = true;
+          slowDot.x = -0.1;
+          slowDot.y = 0.5;
+          slowDot.speed = 0.0025;
+        }
+      }
+
+      raf = requestAnimationFrame(draw);
+    };
+    
+    draw();
+    
+    return () => { 
+      cancelAnimationFrame(raf); 
+      window.removeEventListener('resize', resize); 
+      observer.disconnect();
     };
   }, []);
 
   return (
-    <section id="home" className="min-h-screen flex items-center pt-16 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 relative overflow-hidden">
-      {/* 3D Background Element */}
-      <div className="absolute inset-0 pointer-events-none">
-        <Canvas camera={{ position: [0, 0, 5] }}>
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} />
-          <AnimatedSphere />
-          <OrbitControls enableZoom={false} />
-        </Canvas>
-      </div>
+    <section id="home" className="min-h-[100svh] lg:min-h-[85vh] flex items-center relative overflow-hidden border-none py-10 lg:py-0">
+      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-0 opacity-100 pointer-events-none" />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="flex flex-col md:flex-row items-center justify-between">
-          <motion.div 
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="w-full md:w-1/2 mb-12 md:mb-0"
-          >
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight"
-            >
-              <span className="inline-block">
-                <Typewriter
-                  words={[
-                    "I build AI agents for real-world problems.",
-                    "Full Stack Web & AI Specialist.",
-                    "Modern, Fast, Beautiful, Intelligent.",
-                    "Let's turn your idea into reality."
-                  ]}
-                  loop={0}
-                  cursor
-                  cursorStyle="_"
-                  typeSpeed={60}
-                  deleteSpeed={40}
-                  delaySpeed={2000}
-                />
-              </span>
-            </motion.h1>
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-xl text-gray-700 dark:text-gray-300 mb-8 leading-relaxed"
-            >
-              I specialize in full stack web development using AI. I create intelligent, scalable solutions that solve real-world challenges and deliver exceptional user experiences.
-            </motion.p>
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4"
-            >
-              <a href="sairam_Fullstack_web_Developer.pdf" target="_blank">
-                <Button>View My CV</Button>
-              </a>
-            </motion.div>
-          </motion.div>
-          
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            ref={profileRef}
-            className="w-full md:w-2/5 transition-transform duration-200 ease-out"
-            style={{
-              animation: 'float 4s ease-in-out infinite, rotate3d 10s linear infinite',
-              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-              border: '2px solid #3B82F6',
-              background: 'rgba(255,255,255,0.2)',
-              backdropFilter: 'blur(10px)'
-            }}
-          >
-            <div className="relative w-full h-0 pb-[100%] rounded-2xl overflow-hidden shadow-xl border border-white/10 backdrop-blur-sm">
-          
-            <img
-                src="https://res.cloudinary.com/dwwqwf1q1/image/upload/v1755193861/sairam_ibscor.jpg"
-                alt="SaiRam Polisetty"
-                className="absolute top-0 left-0 w-full h-full object-cover"
-                style={{
-                animation: 'float 6s ease-in-out infinite, rotate3d 12s linear infinite',
-                borderRadius: '1.5rem',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'
-                }}
-            />
-            </div>
-          </motion.div>
-        </div>
+      <div className="container relative z-10 py-12 lg:py-20">
+
+        <motion.span
+          initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ duration:.5 }}
+          className="font-mono text-[0.72rem] text-green-500 tracking-[0.15em] block mt-4 lg:mt-2 mb-4 sm:mb-5">
+          Hi, my name is
+        </motion.span>
+
+        <h1 className="text-[clamp(2.5rem,8vw,5.8rem)] font-bold tracking-[-0.04em] leading-none text-gray-100 mb-2">
+          <TextReveal text="Sairam Polisetty." delay={0.1} />
+        </h1>
+
+        <h2 className="text-[clamp(1.8rem,5.5vw,3.5rem)] font-bold tracking-[-0.03em] leading-[1.1] text-gray-400 mb-7">
+          <TextReveal text="I build things for the web." delay={0.2} />
+        </h2>
+
+        <motion.div
+          initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ duration:.5, delay:.35 }}
+          className="font-mono text-[0.9rem] text-gray-300 mb-8 min-h-[48px] sm:min-h-[26px]">
+          <Typewriter words={['Full-Stack Engineer.','AI Agent Builder.','React Developer.','Problem Solver.']} loop={0} cursor cursorStyle="_" typeSpeed={50} deleteSpeed={30} delaySpeed={2000}/>
+        </motion.div>
+
+        <motion.p
+          initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ duration:.5, delay:.45 }}
+          className="body-text mb-10">
+          I'm a Software Engineer based in India, specializing in building responsive web applications with React and integrating AI features like RAG. Currently pursuing my B.Tech at Narasaraopeta Engineering College and working as a Teaching Assistant to help 1100+ students level up their engineering skills.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }} transition={{ duration:.5, delay:.55 }}
+          className="flex flex-wrap gap-3 mb-8 sm:mb-12">
+          <a href="#projects" className="btn-primary">
+            See my work <ArrowRight size={14}/>
+          </a>
+          <a href="sairam_Fullstack_web_Developer.pdf" target="_blank" rel="noopener noreferrer" className="btn-ghost">
+            <Download size={14}/> Resume
+          </a>
+        </motion.div>
+
       </div>
     </section>
   );

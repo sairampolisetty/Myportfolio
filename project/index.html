@@ -2,48 +2,23 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/jpg" href="/sairam.jpg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sairam Polisetty | Full-Stack Web Engineer</title>
-    <link class="img" rel="icon" type="image/jpg" href="sairam.jpg">
-    <meta name="description" content="Full-stack web engineer specializing in building high-impact web applications that users love." />
+    <title>Sairam Polisetty | Full-Stack Web Engineer & AI Specialist</title>
+    <meta name="description" content="Sairam Polisetty — Full-Stack Web Engineer and AI Specialist crafting intelligent, scalable, and high-impact web applications." />
+    <meta property="og:title" content="Sairam Polisetty — Full-Stack Web Engineer & AI Specialist" />
+    <meta property="og:description" content="Building AI agents and modern web apps that solve real-world problems." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://res.cloudinary.com/dwwqwf1q1/image/upload/v1755193861/sairam_ibscor.jpg" />
+    <meta property="og:url" content="https://sairampolisetty.github.io/" />
     
-    <!-- Custom scripts for cursor effects -->
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const cursor = document.getElementById('cursor');
-        
-        if (cursor && window.matchMedia('(pointer: fine)').matches) {
-          document.addEventListener('mousemove', function(e) {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-          });
-          
-          // Scale effect on clickable elements
-          const clickables = document.querySelectorAll('a, button, input, [role="button"]');
-          clickables.forEach(element => {
-            element.addEventListener('mouseenter', () => {
-              cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
-              cursor.style.opacity = '0.5';
-            });
-            
-            element.addEventListener('mouseleave', () => {
-              cursor.style.transform = 'translate(-50%, -50%) scale(1)';
-              cursor.style.opacity = '1';
-            });
-          });
-        }
-        
-        // Image loading animation
-        const images = document.querySelectorAll('img');
-        images.forEach(img => {
-          img.classList.add('loading');
-          img.onload = function() {
-            img.classList.remove('loading');
-          };
-        });
-      });
-    </script>
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Sairam Polisetty — Full-Stack Web Engineer & AI Specialist" />
+    <meta name="twitter:description" content="Building AI agents and modern web apps that solve real-world problems." />
+    <meta name="twitter:image" content="https://res.cloudinary.com/dwwqwf1q1/image/upload/v1755193861/sairam_ibscor.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   </head>
   <body>
     <div id="root"></div>

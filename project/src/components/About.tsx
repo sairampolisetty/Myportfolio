@@ -1,107 +1,70 @@
-import React, { useRef, useEffect } from 'react';
-import SectionHeading from './SectionHeading';
+import { motion } from 'framer-motion';
+import { TextReveal } from './TextReveal';
+import { SkillCloud } from './SkillCloud';
+import { ImageAtomizer } from './ImageAtomizer';
 
-const About: React.FC = () => {
-  const bulletRefs = useRef<(HTMLLIElement | null)[]>([]);
+const About = () => (
+  <>
+    <section id="about">
+      <div className="container">
+        <motion.div initial={{ opacity:0, y:24 }} whileInView={{ opacity:1, y:0 }} transition={{ duration:.5 }} viewport={{ once:true, amount:.1 }}>
+          <span className="section-num">01. about me</span>
+          <h2 className="section-title mb-8">
+            <TextReveal text="👋 About Me" delay={0.1} />
+          </h2>
+        </motion.div>
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('translate-x-0', 'opacity-100');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        threshold: 0.1,
-        rootMargin: '0px 0px -100px 0px',
-      }
-    );
-
-    bulletRefs.current.forEach((bullet) => {
-      if (bullet) observer.observe(bullet);
-    });
-
-    return () => {
-      bulletRefs.current.forEach((bullet) => {
-        if (bullet) observer.unobserve(bullet);
-      });
-    };
-  }, []);
-
-  return (
-    <section id="about" className="py-24 bg-white dark:bg-gray-900">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading>About Me</SectionHeading>
-        
-        <div className="max-w-3xl mx-auto">
-          <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-10 leading-relaxed">
-            I'm Sairam—a full‑stack web engineer and AI specialist who elevates digital experiences and solves real-world problems with intelligent agents.
-          </p>
-          
-          <ul className="space-y-8">
-            <li 
-              ref={(el) => (bulletRefs.current[0] = el)}
-              className="flex items-start transform -translate-x-8 opacity-0 transition-all duration-500 delay-100"
-            >
-              <span className="flex-shrink-0 p-1 bg-blue-100 dark:bg-blue-900 rounded-full mr-4 mt-1">
-                <span className="block w-2 h-2 bg-blue-500 dark:bg-blue-400 rounded-full"></span>
-              </span>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">AI & Agent Engineering</h3>
-                <p className="text-gray-600 dark:text-gray-400">I build AI agents and intelligent systems that solve real-world problems and automate complex workflows. I have explored 100+ AI tools and continue to learn new tools every day.</p>
+        <div className="grid grid-cols-1 gap-10 items-start">
+          <motion.div initial={{ opacity:0, x:-20 }} whileInView={{ opacity:1, x:0 }} transition={{ duration:.5, delay:.1 }} viewport={{ once:true, amount:.1 }}>
+            <div className="grid md:grid-cols-[6fr_4fr] gap-12 md:gap-16 items-center w-full">
+              <div className="flex flex-col gap-4">
+                <p className="body-text">
+                  I'm <strong className="text-gray-200">Sairam Polisetty</strong> — a Software Engineer with a deep interest in building responsive web applications. I am currently pursuing my B.Tech in ECE at <strong className="text-gray-200">Narasaraopeta Engineering College</strong>, graduating in May 2026.
+                </p>
+                <p className="body-text">
+                  Recently, I worked as a Frontend Engineer Intern at <strong className="text-gray-200">AARO7 Fintech</strong>, where I developed React components and integrated Retrieval-Augmented Generation (RAG) features. I also work as a Teaching Assistant, mentoring over <strong className="text-green-500">1,100 students</strong> through coding challenges and algorithms.
+                </p>
+                <p className="body-text">
+                  Outside of coursework and interning, I enjoy solving Data Structures and Algorithms problems (having solved 180+ on LeetCode) and leading an English communication group with 250+ active members. I believe software should feel fast, intuitive, and human.
+                </p>
               </div>
-            </li>
-            
-            <li 
-              ref={(el) => (bulletRefs.current[1] = el)}
-              className="flex items-start transform -translate-x-8 opacity-0 transition-all duration-500 delay-200"
-            >
-              <span className="flex-shrink-0 p-1 bg-blue-100 dark:bg-blue-900 rounded-full mr-4 mt-1">
-                <span className="block w-2 h-2 bg-blue-500 dark:bg-blue-400 rounded-full"></span>
-              </span>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Front‑End Precision</h3>
-                <p className="text-gray-600 dark:text-gray-400">Pixel‑perfect HTML/CSS and React that feel alive.</p>
+
+              <div className="relative w-full max-w-[500px] mx-auto">
+                {/* Floating "Hover me" hint outside the image container */}
+                <div className="absolute -top-[35px] -left-[10px] -rotate-10 font-mono text-green-500 text-base font-bold pointer-events-none flex items-center gap-2 z-20" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
+                    Hover me
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="rotate-[135deg]">
+                      <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                  </div>
+
+                  {/* Main image container, enlarged and set to true aspect ratio */}
+                  <div className="relative w-full aspect-[1239/1272]">
+                    <ImageAtomizer imageUrl="https://res.cloudinary.com/dwwqwf1q1/image/upload/v1755193861/sairam_ibscor.jpg" />
+                  </div>
+                </div>
               </div>
-            </li>
-            
-            <li 
-              ref={(el) => (bulletRefs.current[2] = el)}
-              className="flex items-start transform -translate-x-8 opacity-0 transition-all duration-500 delay-300"
-            >
-              <span className="flex-shrink-0 p-1 bg-blue-100 dark:bg-blue-900 rounded-full mr-4 mt-1">
-                <span className="block w-2 h-2 bg-blue-500 dark:bg-blue-400 rounded-full"></span>
-              </span>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Robust Back‑Ends</h3>
-                <p className="text-gray-600 dark:text-gray-400">Node.js + Express powering fast, reliable APIs.</p>
-              </div>
-            </li>
-            
-            <li 
-              ref={(el) => (bulletRefs.current[3] = el)}
-              className="flex items-start transform -translate-x-8 opacity-0 transition-all duration-500 delay-400"
-            >
-              <span className="flex-shrink-0 p-1 bg-blue-100 dark:bg-blue-900 rounded-full mr-4 mt-1">
-                <span className="block w-2 h-2 bg-blue-500 dark:bg-blue-400 rounded-full"></span>
-              </span>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Data at Scale</h3>
-                <p className="text-gray-600 dark:text-gray-400">MongoDB & SQL designs that grow with you.</p>
-              </div>
-            </li>
-          </ul>
-          
-          <p className="text-lg text-gray-700 dark:text-gray-300 mt-10 font-medium">
-            Let's craft the next app users can't live without.
-          </p>
+          </motion.div>
         </div>
       </div>
     </section>
-  );
-};
+
+    {/* Skills section immediately after about */}
+    <section id="skills">
+      <div className="container">
+        <motion.div initial={{ opacity:0, y:24 }} whileInView={{ opacity:1, y:0 }} transition={{ duration:.5 }} viewport={{ once:true, amount:.1 }}>
+          <span className="section-num">02. skills</span>
+          <h2 className="section-title mb-8">
+            <TextReveal text="💡 Tech Arsenal" delay={0.1} />
+          </h2>
+        </motion.div>
+
+        <motion.div initial={{ opacity:0 }} whileInView={{ opacity:1 }} transition={{ duration: 1, delay: 0.2 }} viewport={{ once:true, amount:0.1 }}>
+          <SkillCloud />
+        </motion.div>
+      </div>
+    </section>
+  </>
+);
 
 export default About;

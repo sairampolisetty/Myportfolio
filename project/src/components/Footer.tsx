@@ -1,46 +1,46 @@
 import React from 'react';
-import { Linkedin, Github, Twitter, Mail } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { socials } from '../lib/data';
 
-const Footer: React.FC = () => {
-  const currentYear = new Date().getFullYear();
-  
-  const socialLinks = [
-    { icon: <Linkedin size={20} />, href: 'https://www.linkedin.com/in/sairam-polisetty/', target:'__blank', label: 'LinkedIn' },
-    { icon: <Github size={20} />, href: 'https://github.com/sairampolisetty',target:'_blank', label: 'GitHub' },
-    { icon: <Twitter size={20} />, href: '#', label: 'Twitter' },
-    { icon: <Mail size={20} />, href: '#', label: 'Email' }
-  ];
-
-  return (
-    <footer className="bg-gray-900 text-white py-12">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <div className="mb-8 md:mb-0">
-            <div className="text-2xl font-bold mb-2">Sairam.dev</div>
-            <p className="text-gray-400">
-              © {currentYear} Sairam Polisetty
-            </p>
-            <p className="text-gray-400 mt-2">
-              Crafted with care. Let's build something extraordinary.
-            </p>
-          </div>
-          
-          <div className="flex space-x-4">
-            {socialLinks.map((link, index) => (
-              <a
-                key={index}
-                href={link.href}
-                aria-label={link.label}
-                className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 text-gray-300 hover:bg-blue-600 hover:text-white transition-colors duration-300 transform perspective-icon"
-              >
-                {link.icon}
-              </a>
-            ))}
-          </div>
-        </div>
+const Footer = () => (
+  <footer className="pt-20 bg-[#0d0d0d] border-t border-[#1f1f1f]">
+    <div className="container flex flex-col items-center">
+      {/* Top section: Social Icons with Labels */}
+      <div className="flex flex-wrap justify-center gap-6 sm:gap-10 mb-32">
+        {socials.map(s => (
+          <motion.a
+            key={s.label}
+            href={s.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={s.label}
+            whileHover={{ scale: 1.1, y: -4 }}
+            whileTap={{ scale: 0.95 }}
+            className="group flex flex-col items-center gap-3 text-gray-400 hover:text-white transition-colors duration-300 no-underline"
+          >
+            <div 
+              className={`w-[52px] h-[52px] sm:w-[60px] sm:h-[60px] ${s.shape === 'circle' ? 'rounded-full' : 'rounded-[18px]'} flex items-center justify-center shadow-[0_10px_20px_-10px_rgba(0,0,0,0.5)] transition-all duration-300 ring-1 ring-white/5 group-hover:ring-white/20`}
+              style={{ backgroundColor: s.bg, color: s.color }}
+            >
+              {s.icon}
+            </div>
+            <span className="text-[0.75rem] font-sans tracking-wide">
+              {s.label}
+            </span>
+          </motion.a>
+        ))}
       </div>
-    </footer>
-  );
-};
+    </div>
+
+    {/* Bottom section: Copyright Divider */}
+    <div className="w-full border-t border-[#1f1f1f] bg-[#0a0a0a]">
+      <div className="container pt-8 pb-32 flex justify-center text-center">
+        <span className="text-gray-400 text-[0.85rem] font-sans">
+          This site is designed and developed by Sairam Polisetty (@sairampolisetty) | &copy; 2026 All rights reserved.
+        </span>
+      </div>
+    </div>
+  </footer>
+);
 
 export default Footer;

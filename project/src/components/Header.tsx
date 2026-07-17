@@ -1,130 +1,59 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X, Moon, Sun } from 'lucide-react';
-import NavLink from './NavLink';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X } from 'lucide-react';
 
-interface HeaderProps {
-  darkMode: boolean;
-  toggleDarkMode: () => void;
-}
+const links = [
+  { label:'about', href:'#about' }, { label:'skills', href:'#skills' },
+  { label:'experience', href:'#experience' }, { label:'projects', href:'#projects' },
+  { label:'contact', href:'#contact' },
+];
 
-const Header: React.FC<HeaderProps> = ({ darkMode, toggleDarkMode }) => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+const Header = () => {
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const fn = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', fn, { passive:true });
+    return () => window.removeEventListener('scroll', fn);
   }, []);
 
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
-
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-white bg-opacity-90 backdrop-blur-sm shadow-sm dark:bg-gray-900 dark:bg-opacity-90'
-          : 'bg-white bg-opacity-80 backdrop-blur-sm dark:bg-transparent'
-      } border-b border-gray-200 dark:border-gray-800`}
-    >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center">
-            <span className="text-xl font-bold text-gray-900 dark:text-white">Sairam.dev</span>
-          </div>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden md:block">
-            <ul className="flex space-x-8">
-              <NavLink href="#home">Home</NavLink>
-              <NavLink href="#about">About</NavLink>
-              <NavLink href="#skills">Skills</NavLink>
-              <NavLink href="#experience">Experience</NavLink>
-              <NavLink href="#projects">Projects</NavLink>
-              <NavLink href="#contact">Contact</NavLink>
-            </ul>
+    <>
+      <header className="site-header" style={{ boxShadow: scrolled ? '0 1px 0 #1f1f1f' : 'none' }}>
+        <div className="container">
+          <a href="#home" className="logo">sp<span style={{ color:'#9ca3af' }}>.</span></a>
+          <nav className="nav-desktop">
+            {links.map((l, i) => (
+              <a key={l.href} href={l.href} className="relative group transition-colors duration-300 py-1">
+                <span className="text-green-500 mr-1 text-[0.65rem] group-hover:text-green-400 transition-colors">0{i+1}.</span>
+                <span className="text-gray-400 group-hover:text-gray-200 transition-colors">{l.label}</span>
+                <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-green-500 transition-all duration-300 group-hover:w-full"></span>
+              </a>
+            ))}
           </nav>
-
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={toggleDarkMode}
-              className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-blue-100 dark:hover:bg-blue-900 border border-gray-300 dark:border-gray-700 transition-colors"
-              aria-label="Toggle dark mode"
-            >
-              {darkMode ? <Sun size={20} className="text-blue-500" /> : <Moon size={20} className="text-gray-700" />}
-            </button>
-            
-            {/* Mobile menu button */}
-            <button
-              className="md:hidden p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-blue-100 dark:hover:bg-blue-900 border border-gray-300 dark:border-gray-700 transition-colors"
-              onClick={toggleMobileMenu}
-              aria-label="Toggle mobile menu"
-            >
-              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
+          <button className="nav-burger" onClick={() => setOpen(o => !o)} aria-label="Menu">
+            {open ? <X size={18}/> : <Menu size={18}/>}
+          </button>
         </div>
-      </div>
 
-      {/* Mobile Navigation */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-white dark:bg-gray-900 shadow-lg">
-          <div className="px-4 pt-2 pb-3 space-y-1 sm:px-3">
-            <a
-              href="#home"
-              className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Home
-            </a>
-            <a
-              href="#about"
-              className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              About
-            </a>
-            <a
-              href="#skills"
-              className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Skills
-            </a>
-            <a
-              href="#experience"
-              className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Experience
-            </a>
-            <a
-              href="#projects"
-              className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Projects
-            </a>
-            <a
-              href="#contact"
-              className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Contact
-            </a>
-          </div>
-        </div>
-      )}
-    </header>
+        <AnimatePresence>
+          {open && (
+            <motion.div className="nav-drawer"
+              initial={{ height:0, opacity:0 }} animate={{ height:'auto', opacity:1 }} exit={{ height:0, opacity:0 }}
+              transition={{ duration:.22, ease:'easeOut' }}>
+              {links.map((l, i) => (
+                <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="relative group inline-block py-1">
+                  <span className="text-green-500 mr-2 group-hover:text-green-400 transition-colors">0{i+1}.</span>
+                  <span className="text-gray-400 group-hover:text-gray-200 transition-colors">{l.label}</span>
+                  <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-green-500 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </header>
+    </>
   );
 };
 
